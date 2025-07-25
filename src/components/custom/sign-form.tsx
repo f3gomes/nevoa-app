@@ -1,7 +1,20 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
 import { CircleUser } from "lucide-react";
+
+import { login, register } from "@/lib/api";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthFormData, authSchema } from "@/schemas/user.schema";
+
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import {
   CardContent,
   CardDescription,
@@ -9,14 +22,60 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { useState } from "react";
-import { DialogTitle } from "@radix-ui/react-dialog";
+import UserMenu from "./user-menu";
 
 export default function SignForm() {
   const [typeLogin, setTypeLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+
+  const {
+    register: formRegister,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<AuthFormData>({
+    resolver: zodResolver(authSchema),
+  });
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("userName");
+    if (storedUser) setUserName(storedUser);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    setUserName(null);
+    toast.success("Você saiu com sucesso");
+  };
+
+  const onSubmit = async (data: AuthFormData) => {
+    setLoading(true);
+    try {
+      const response = typeLogin ? await login(data) : await register(data);
+
+      localStorage.setItem("token", response.token);
+      localStorage.setItem(
+        "userName",
+        response.user?.userName || data.userName
+      );
+
+      toast.success(typeLogin ? "Login realizado!" : "Cadastro realizado!");
+      reset();
+      setUserName(response.user?.userName || data.userName);
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message || "Erro ao processar sua requisição."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (userName) {
+    return <UserMenu userName={userName} handleLogout={handleLogout} />;
+  }
 
   return (
     <Dialog>
@@ -36,39 +95,42 @@ export default function SignForm() {
           </CardDescription>
         </CardHeader>
 
-        <form action="#">
+        <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
-            <div>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="userName">Usuário</Label>
-                  <Input
-                    id="userName"
-                    name="userName"
-                    required
-                  />
+            <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="userName">Usuário</Label>
+                <Input id="userName" {...formRegister("userName")} />
+                {errors.userName && (
+                  <span className="text-red-500 text-sm">
+                    {errors.userName.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="grid gap-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Senha</Label>
+
+                  <button
+                    type="button"
+                    className="text-sm underline hover:text-pink-500"
+                    onClick={() => setTypeLogin(!typeLogin)}
+                  >
+                    {typeLogin ? "Não possui conta?" : "Já tem uma conta?"}
+                  </button>
                 </div>
 
-                <div className="grid gap-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="login-password">Senha</Label>
-
-                    <a
-                      href="#"
-                      className="text-sm underline hover:text-pink-500"
-                      onClick={() => setTypeLogin(!typeLogin)}
-                    >
-                      {typeLogin ? "Não possui conta?" : "Já tem uma conta?"}
-                    </a>
-                  </div>
-
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                  />
-                </div>
+                <Input
+                  id="password"
+                  type="password"
+                  {...formRegister("password")}
+                />
+                {errors.password && (
+                  <span className="text-red-500 text-sm">
+                    {errors.password.message}
+                  </span>
+                )}
               </div>
             </div>
           </CardContent>
@@ -77,8 +139,15 @@ export default function SignForm() {
             <Button
               type="submit"
               className="w-full bg-pink-600 hover:bg-pink-700"
+              disabled={loading}
             >
-              {typeLogin ? "Entrar" : "Cadastrar"}
+              {loading
+                ? typeLogin
+                  ? "Entrando..."
+                  : "Cadastrando..."
+                : typeLogin
+                ? "Entrar"
+                : "Cadastrar"}
             </Button>
           </CardFooter>
         </form>
