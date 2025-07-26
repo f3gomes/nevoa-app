@@ -1,6 +1,7 @@
 "use client";
 
 import { CourseCard } from "@/components/custom/course-card";
+import CourseForm from "@/components/custom/course-form";
 import Navbar from "@/components/custom/navbar";
 import { listCourses } from "@/lib/api";
 import { Course } from "@/types/types";
@@ -19,10 +20,7 @@ export default function PanelPage() {
   }, []);
 
   const filteredCourses = courses.filter((course) => {
-    return (
-      course.status === "ATIVO" &&
-      course.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    return course.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   const fetchCourses = async () => {
@@ -51,11 +49,9 @@ export default function PanelPage() {
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-black drop-shadow flex justify-center items-center gap-2">
                 <span>Painel do Administrador</span>
               </h1>
-              <p className="text-gray/80 mt-3 max-w-2xl mx-auto text-base md:text-lg">
-                Aprenda com os melhores com nossa seleção criteriosa de cursos
-                de música ministrados por profissionais.
-              </p>
             </div>
+
+            <CourseForm fetchCourses={fetchCourses} />
 
             {isLoading ? (
               <p className="text-center text-slate-800 text-lg mt-12">
