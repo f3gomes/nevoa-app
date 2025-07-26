@@ -15,8 +15,20 @@ export default function PanelPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
+  const [showActive, setShowActive] = useState(false);
+  const [showInactive, setShowInactive] = useState(false);
+
   const filteredCourses = courses.filter((course) => {
-    return course.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = course.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      (!showActive && !showInactive) ||
+      (showActive && course.status === "ATIVO") ||
+      (showInactive && course.status === "INATIVO");
+
+    return matchesSearch && matchesStatus;
   });
 
   const fetchCourses = async () => {
@@ -47,7 +59,27 @@ export default function PanelPage() {
               </h1>
             </div>
 
-            <CourseForm fetchCourses={fetchCourses} />
+            <div className="flex gap-3">
+              <CourseForm fetchCourses={fetchCourses} />
+
+              <div className="flex items-center gap-6 text-lg h-9">
+                <label
+                  className="flex items-center gap-2"
+                  onChange={() => setShowActive((prev) => !prev)}
+                >
+                  <input type="checkbox" checked={showActive} />
+                  <span className="select-none">Ativos</span>
+                </label>
+
+                <label
+                  className="flex items-center gap-2"
+                  onChange={() => setShowInactive((prev) => !prev)}
+                >
+                  <input type="checkbox" checked={showInactive} />
+                  <span className="select-none">Inativos</span>
+                </label>
+              </div>
+            </div>
 
             {isLoading ? (
               <p className="text-center text-slate-800 text-lg mt-12">
