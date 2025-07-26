@@ -1,7 +1,12 @@
 
 # ☁️ Nevoa App - Frontend Next.js
 
-Aplicativo frontend implementado com Next.js, React e Tailwind CSS.
+Aplicativo fullstack para gerenciamento de cursos, com frontend desenvolvido em Next.js, React e Tailwind CSS, e backend em Node.js.
+A aplicação permite o cadastro, listagem, edição e remoção de cursos (CRUD), incluindo informações básicas como título, descrição, status e data de publicação.
+
+🔍 Também oferece funcionalidade de busca por título e filtro por status (ativo/inativo), facilitando a navegação entre os cursos cadastrados.
+
+🛠️ Um painel administrativo dedicado permite a gestão eficiente dos cursos, com uma interface moderna e responsiva construída com Tailwind CSS. A aplicação foi projetada com boas práticas de organização de código, tipagem com TypeScript e padronização com ESLint e Prettier.
 
 ---
 
