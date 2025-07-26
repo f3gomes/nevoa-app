@@ -1,0 +1,17 @@
+services:
+  nevoa-app:
+    # Nome do serviço
+    container_name: nevoa-app
+    # Constrói a imagem a partir do Dockerfile no diretório atual
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Mapeia a porta 3000 do contêiner para a porta 3000 do host
+    ports:
+      - "3000:3000"
+    # Define a variável de ambiente para o contêiner
+    # Esta variável será usada pelo aplicativo Next.js
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:3333/api/v1
+    # Reinicia o contêiner se ele sair inesperadamente
+    restart: always
