@@ -64,7 +64,7 @@ export default function PanelPage() {
 
               <div className="flex items-center gap-6 text-lg h-9">
                 <label
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 cursor-pointer"
                   onChange={() => setShowActive((prev) => !prev)}
                 >
                   <input
@@ -76,7 +76,7 @@ export default function PanelPage() {
                 </label>
 
                 <label
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 cursor-pointer"
                   onChange={() => setShowInactive((prev) => !prev)}
                 >
                   <input
