@@ -56,3 +56,24 @@ export const createCourse = async (payload: CoursePayload) => {
     return error;
   }
 };
+
+export const updateCourse = async (id: string, payload: CoursePayload) => {
+  let token = null;
+
+  if (typeof window !== "undefined") {
+    token = window.localStorage.getItem("token")!;
+  }
+
+  try {
+    const response = await api.patch(`/course/edit/${id}`, payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

@@ -1,6 +1,7 @@
 "use client";
 
 import { CourseCard } from "@/components/custom/course-card";
+import EditCourseForm from "@/components/custom/course-edit-form";
 import CourseForm from "@/components/custom/course-form";
 import Navbar from "@/components/custom/navbar";
 import { listCourses } from "@/lib/api";
@@ -8,16 +9,11 @@ import { Course } from "@/types/types";
 import { useEffect, useState } from "react";
 
 export default function PanelPage() {
+  const [open, setOpen] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    listCourses()
-      .then((list) => setCourses(list))
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
-  }, []);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
   const filteredCourses = courses.filter((course) => {
     return course.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -65,14 +61,35 @@ export default function PanelPage() {
                   </p>
                 ) : (
                   <div className="flex flex-wrap gap-3">
-                    {filteredCourses.map((course: Course) => (
-                      <CourseCard key={course.id} course={course} panel />
+                    {filteredCourses.map((course) => (
+                      <div
+                        key={course.id}
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setSelectedCourse(course);
+                          setOpen(true);
+                        }}
+                      >
+                        <CourseCard course={course} panel />
+                      </div>
                     ))}
                   </div>
                 )}
               </>
             )}
           </div>
+
+          {selectedCourse && (
+            <EditCourseForm
+              open={open}
+              setOpen={setOpen}
+              course={selectedCourse}
+              fetchCourses={async () => {
+                await fetchCourses();
+                setSelectedCourse(null);
+              }}
+            />
+          )}
         </section>
       </main>
     </div>
