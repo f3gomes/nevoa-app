@@ -76,7 +76,7 @@ export const CourseCard = ({ course, panel = false }: Props) => {
           variant="outline"
           className="text-sm text-purple-700 border-purple-700 hover:bg-purple-50"
         >
-          Add to cart
+          Comprar
         </Button>
       </CardFooter>
     </Card>

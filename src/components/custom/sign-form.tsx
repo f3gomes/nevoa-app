@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { CircleUser } from "lucide-react";
+import Cookies from "js-cookie";
 
 import { login, register } from "@/lib/api";
 import { DialogTitle } from "@radix-ui/react-dialog";
@@ -23,11 +24,14 @@ import {
   CardTitle,
 } from "../ui/card";
 import UserMenu from "./user-menu";
+import { useRouter } from "next/navigation";
 
 export default function SignForm() {
   const [typeLogin, setTypeLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const {
     register: formRegister,
@@ -44,10 +48,13 @@ export default function SignForm() {
   }, []);
 
   const handleLogout = () => {
+    setUserName(null);
+    Cookies.remove("nevoa-app");
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
-    setUserName(null);
-    toast.success("Você saiu com sucesso");
+    toast.success("Você foi deslogado");
+
+    router.push("/");
   };
 
   const onSubmit = async (data: AuthFormData) => {
@@ -55,6 +62,7 @@ export default function SignForm() {
     try {
       const response = typeLogin ? await login(data) : await register(data);
 
+      Cookies.set("nevoa-app", "logged");
       localStorage.setItem("token", response.token);
       localStorage.setItem(
         "userName",
