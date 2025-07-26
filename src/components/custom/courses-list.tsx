@@ -55,7 +55,7 @@ export default function CoursesList({ searchTerm }: Props) {
           <div className="flex flex-wrap gap-3 justify-center">
             {filteredCourses.map((course) => (
               <div key={course.id}>
-                <CourseCard course={course} />
+                <CourseCard course={course} fetchCourses={async () => {}} />
               </div>
             ))}
           </div>
