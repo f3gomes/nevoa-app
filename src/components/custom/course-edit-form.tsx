@@ -3,7 +3,6 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
-import { Pencil } from "lucide-react";
 
 import { updateCourse } from "@/lib/api";
 import { DialogTitle } from "@radix-ui/react-dialog";
@@ -12,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogContent } from "../ui/dialog";
 import {
   CardContent,
   CardDescription,
@@ -75,12 +74,6 @@ export default function EditCourseForm({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="text-sm">
-          <Pencil size={16} /> Editar
-        </Button>
-      </DialogTrigger>
-
       <DialogContent className="bg-[#1a1a1a] text-white sm:max-w-[425px] border border-neutral-700 rounded-xl shadow-md">
         <CardHeader>
           <DialogTitle>

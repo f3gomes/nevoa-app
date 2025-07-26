@@ -67,7 +67,11 @@ export default function PanelPage() {
                   className="flex items-center gap-2"
                   onChange={() => setShowActive((prev) => !prev)}
                 >
-                  <input type="checkbox" checked={showActive} />
+                  <input
+                    type="checkbox"
+                    checked={showActive}
+                    onChange={() => {}}
+                  />
                   <span className="select-none">Ativos</span>
                 </label>
 
@@ -75,7 +79,11 @@ export default function PanelPage() {
                   className="flex items-center gap-2"
                   onChange={() => setShowInactive((prev) => !prev)}
                 >
-                  <input type="checkbox" checked={showInactive} />
+                  <input
+                    type="checkbox"
+                    checked={showInactive}
+                    onChange={() => {}}
+                  />
                   <span className="select-none">Inativos</span>
                 </label>
               </div>
@@ -118,7 +126,11 @@ export default function PanelPage() {
           {selectedCourse && (
             <EditCourseForm
               open={open}
-              setOpen={setOpen}
+              setOpen={() => {
+                // eslint-disable-next-line
+                setOpen;
+                setSelectedCourse(null);
+              }}
               course={selectedCourse}
               fetchCourses={async () => {
                 await fetchCourses();
