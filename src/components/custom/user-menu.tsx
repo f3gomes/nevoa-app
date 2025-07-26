@@ -30,7 +30,7 @@ export default function UserMenu({ userName, handleLogout }: UserMenuProps) {
         <DropdownMenuItem className="cursor-pointer text-white">
           <Link
             href={`/panel`}
-            className="text-sm font-medium transition-colors duration-200 hover:text-pink-400"
+            className="text-sm font-medium transition-colors duration-200 hover:text-pink-400 w-full"
           >
             Painel
           </Link>
