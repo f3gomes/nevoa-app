@@ -72,6 +72,8 @@ export default function SignForm() {
       toast.success(typeLogin ? "Login realizado!" : "Cadastro realizado!");
       reset();
       setUserName(response.user?.userName || data.userName);
+
+      // eslint-disable-next-line
     } catch (error: any) {
       toast.error(
         error.response?.data?.message || "Erro ao processar sua requisição."

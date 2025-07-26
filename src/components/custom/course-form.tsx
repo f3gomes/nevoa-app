@@ -51,6 +51,8 @@ export default function CourseForm({ fetchCourses }: FetchCoursesProps) {
       toast.success("Curso cadastrado com sucesso!");
       fetchCourses();
       reset();
+
+      // eslint-disable-next-line
     } catch (error: any) {
       toast.error(
         error.response?.data?.message || "Erro ao processar sua requisição."

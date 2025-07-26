@@ -62,6 +62,8 @@ export default function EditCourseForm({
       toast.success("Curso atualizado com sucesso!");
       fetchCourses();
       setOpen(false);
+
+      // eslint-disable-next-line
     } catch (error: any) {
       toast.error(
         error.response?.data?.message || "Erro ao atualizar o curso."

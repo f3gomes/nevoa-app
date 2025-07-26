@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Star, Clock } from "lucide-react";
+import { Star, Clock, Trash2 } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -12,15 +12,34 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Course } from "@/types/types";
+import { deleteCourse } from "@/lib/api";
+import { toast } from "sonner";
 
 interface Props {
-  course: Course;
+  course: Course & { id?: string };
   panel?: boolean;
+  fetchCourses: () => Promise<void>;
 }
 
-export const CourseCard = ({ course, panel = false }: Props) => {
+export const CourseCard = ({ course, panel = false, fetchCourses }: Props) => {
+  const handleRemoveCouse = async () => {
+    const confirmed = window.confirm(
+      "Tem certeza que deseja excluir este curso?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deleteCourse(course.id);
+      toast.success("Curso excluído com sucesso!");
+      fetchCourses();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <Card className="w-[24.5rem] h-[485.69px] bg-slate-900 text-white border border-neutral-800 hover:scale-[1.03] transition-transform duration-300 shadow-md overflow-hidden">
+    <Card className="w-[24.5rem] h-[485.69px] bg-slate-900 text-white border border-neutral-800 hover:scale-[1.03] transition-transform duration-300 shadow-md overflow-hidden relative">
       <CardHeader className="p-0 relative" style={{ height: "200px" }}>
         <Image
           src={course.imageUrl}
@@ -72,12 +91,25 @@ export const CourseCard = ({ course, panel = false }: Props) => {
       </CardContent>
 
       <CardFooter className="flex items-center justify-between px-4 pb-4 pt-0">
-        <Button
-          variant="outline"
-          className="text-sm text-purple-700 border-purple-700 hover:bg-purple-50"
-        >
-          Comprar
-        </Button>
+        {!panel ? (
+          <Button
+            variant="outline"
+            className="text-sm text-purple-700 border-purple-700 hover:bg-purple-50"
+          >
+            Comprar
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            className="text-sm bg-red-700 border-red-700 hover:bg-red-500 z-50 absolute"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveCouse();
+            }}
+          >
+            <Trash2 />
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

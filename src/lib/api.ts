@@ -77,3 +77,24 @@ export const updateCourse = async (id: string, payload: CoursePayload) => {
     return error;
   }
 };
+
+export const deleteCourse = async (id: string) => {
+  let token = null;
+
+  if (typeof window !== "undefined") {
+    token = window.localStorage.getItem("token")!;
+  }
+
+  try {
+    const response = await api.delete(`/course/edit/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

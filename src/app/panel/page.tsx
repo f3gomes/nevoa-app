@@ -70,7 +70,11 @@ export default function PanelPage() {
                           setOpen(true);
                         }}
                       >
-                        <CourseCard course={course} panel />
+                        <CourseCard
+                          course={course}
+                          fetchCourses={async () => await fetchCourses()}
+                          panel
+                        />
                       </div>
                     ))}
                   </div>
