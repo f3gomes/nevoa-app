@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { CircleUser } from "lucide-react";
+import Link from "next/link";
 
 interface UserMenuProps {
   userName: string;
@@ -25,6 +26,16 @@ export default function UserMenu({ userName, handleLogout }: UserMenuProps) {
         <DropdownMenuItem disabled>
           Logado como <strong>{userName}</strong>
         </DropdownMenuItem>
+
+        <DropdownMenuItem className="cursor-pointer text-white">
+          <Link
+            href={`/panel`}
+            className="text-sm font-medium transition-colors duration-200 hover:text-pink-400"
+          >
+            Painel
+          </Link>
+        </DropdownMenuItem>
+
         <DropdownMenuItem
           onClick={handleLogout}
           className="cursor-pointer text-red-500"

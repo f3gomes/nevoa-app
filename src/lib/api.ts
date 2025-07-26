@@ -18,3 +18,8 @@ export const register = async (payload: AuthPayload) => {
   const response = await api.post("/user/new", payload);
   return response.data;
 };
+
+export const listCourses = async () => {
+  const response = await api.get("/course/list",);
+  return response.data.courses;
+};
