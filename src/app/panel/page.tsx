@@ -18,18 +18,20 @@ export default function PanelPage() {
   const [showActive, setShowActive] = useState(false);
   const [showInactive, setShowInactive] = useState(false);
 
-  const filteredCourses = courses.filter((course) => {
-    const matchesSearch = course.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
+  const filteredCourses = Array.isArray(courses)
+    ? courses.filter((course) => {
+        const matchesSearch = course.title
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
 
-    const matchesStatus =
-      (!showActive && !showInactive) ||
-      (showActive && course.status === "ATIVO") ||
-      (showInactive && course.status === "INATIVO");
+        const matchesStatus =
+          (!showActive && !showInactive) ||
+          (showActive && course.status === "ATIVO") ||
+          (showInactive && course.status === "INATIVO");
 
-    return matchesSearch && matchesStatus;
-  });
+        return matchesSearch && matchesStatus;
+      })
+    : [];
 
   const fetchCourses = async () => {
     const list = await listCourses();

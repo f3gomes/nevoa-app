@@ -22,12 +22,14 @@ export default function CoursesList({ searchTerm }: Props) {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const filteredCourses = courses.filter((course) => {
-    return (
-      course.status === "ATIVO" &&
-      course.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  const filteredCourses = Array.isArray(courses)
+    ? courses.filter((course) => {
+        return (
+          course.status === "ATIVO" &&
+          course.title.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      })
+    : [];
 
   return (
     <section className="min-h-screen text-black bg-yellow-100">
